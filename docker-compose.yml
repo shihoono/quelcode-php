@@ -8,7 +8,7 @@ services:
       - ./mysql5.7/mysql:/var/lib/mysql
       - ./mysql5.7/mysqlvolume:/mysqlvolume
     ports:
-      - 13306:3306
+      - 13106:3306
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=test
@@ -21,7 +21,7 @@ services:
     volumes:
       - ./html:/var/www/html
     ports:
-      - 10080:80
+      - 10180:80
     links:
       - mysql:mysql
   phpmyadmin:
@@ -32,7 +32,7 @@ services:
       - PMA_USER=root
       - PMA_PASSWORD=root
     ports:
-      - 10081:80
+      - 10181:80
     volumes:
       - ./phpmyadmin/sessions:/sessions
     links:
