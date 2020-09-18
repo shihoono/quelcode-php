@@ -33,7 +33,7 @@ dbname:test
 ### Macから接続する場合
 ```
 host:localhost
-port:13306
+port:13106
 user:test
 password:test
 dbname:test
