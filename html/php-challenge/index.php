@@ -46,7 +46,7 @@ $start = ($page - 1) * 5;
 $start = max(0, $start);
 
 $posts = $db->prepare('SELECT m.name, m.picture, p.* FROM members m, 
-						(SELECT posts.*, rt_cnt FROM posts LEFT JOIN (SELECT retweeted_post_id, COUNT(retweeted_post_id) AS rt_cnt FROM retweet GROUP BY retweeted_post_id) AS rt ON posts.id=rt.retweeted_post_id) p
+						(SELECT posts.*, rt_cnt, like_cnt FROM posts LEFT JOIN (SELECT retweeted_post_id, COUNT(retweeted_post_id) AS rt_cnt FROM retweet GROUP BY retweeted_post_id) AS rt ON posts.id=rt.retweeted_post_id LEFT JOIN (SELECT liked_post_id, COUNT(liked_post_id) AS like_cnt FROM likes GROUP BY liked_post_id) AS li ON posts.id=li.liked_post_id) p
 						WHERE  m.id=p.member_id ORDER BY p.created DESC LIMIT ?, 5');
 $posts->bindParam(1, $start, PDO::PARAM_INT);
 $posts->execute();
@@ -65,6 +65,24 @@ $alreadyRetweeted = 0;
 for ($i = 0; $i < count($retweetedMessage); $i++) {
 	if ($retweetedMessage[$i]['retweeted_post_id'] === $post['id']){
 		$alreadyRetweeted = $post['id'];
+		break;
+	}
+}
+
+//ログインメンバーがいいねしたメッセージidの一覧
+$likedMessages = $db->prepare('SELECT liked_post_id FROM likes WHERE like_member_id=?');
+$likedMessages->bindParam(1, $_SESSION['id'], PDO::PARAM_INT);
+$likedMessages->execute();
+$likedMessage = array();
+foreach ($likedMessages as $liMessage) {
+	$likedMessage[] = $liMessage;
+}
+
+//いいね済みかどうかチェック
+$alreadyLiked = 0;
+for ($i =0; $i < count($likedMessage); $i++){
+	if ($likedMessage[$i]['liked_post_id'] == $post['id']){
+		$alreadyLiked = $POST['id'];
 		break;
 	}
 }
@@ -95,7 +113,7 @@ function makeLink($value) {
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>ひとこと掲示板</title>
-
+	<link href="https://use.fontawesome.com/releases/v5.6.1/css/all.css" rel="stylesheet">
 	<link rel="stylesheet" href="style.css" />
 </head>
 
@@ -150,6 +168,18 @@ if ($alreadyRetweeted > 0) {
 } 
 ?>
 
+<!-- いいねボタン -->
+<?php
+if($post['like_cnt'] > 0){
+?>
+[<a class="like" style="color:red;" href="like.php?id=<?php echo h($post['id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php echo h($post['like_cnt']); ?></span>]
+<?php 
+}else {
+?>
+[<a class="like" href="like.php?id=<?php echo h($post['id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php echo h($post['like_cnt']); ?></span>]
+<?php 
+}
+?>
 <?php
 if ($_SESSION['id'] == $post['member_id']):
 ?>
