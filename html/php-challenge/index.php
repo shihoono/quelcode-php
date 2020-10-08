@@ -21,7 +21,8 @@ if (!empty($_POST)) {
 		$message->execute(array(
 			$member['id'],
 			$_POST['message'],
-			$_POST['reply_post_id']
+			$_POST['reply_post_id'],
+			$_POST['retweeted_post_id']
 		));
 
 		header('Location: index.php'); exit();
@@ -44,9 +45,29 @@ $page = min($page, $maxPage);
 $start = ($page - 1) * 5;
 $start = max(0, $start);
 
-$posts = $db->prepare('SELECT m.name, m.picture, p.* FROM members m, posts p WHERE m.id=p.member_id ORDER BY p.created DESC LIMIT ?, 5');
+$posts = $db->prepare('SELECT m.name, m.picture, p.* FROM members m, 
+						(SELECT posts.*, rt_cnt FROM posts LEFT JOIN (SELECT retweeted_post_id, COUNT(retweeted_post_id) AS rt_cnt FROM retweet GROUP BY retweeted_post_id) AS rt ON posts.id=rt.retweeted_post_id) p
+						WHERE  m.id=p.member_id ORDER BY p.created DESC LIMIT ?, 5');
 $posts->bindParam(1, $start, PDO::PARAM_INT);
 $posts->execute();
+
+//リツイート
+$retweetedMessages = $db->prepare('SELECT retweeted_post_id FROM retweet WHERE retweet_member_id=?');
+$retweetedMessages->bindParam(1, $_SESSION['id'], PDO::PARAM_INT);
+$retweetedMessages->execute();
+$retweetedMessage = array();
+foreach ($retweetedMessages as $rtMessage) {
+	$retweetedMessage[] = $rtMessage;
+}
+
+//リツイート済みかどうかチェック
+$alreadyRetweeted = 0;
+for ($i = 0; $i < count($retweetedMessage); $i++) {
+	if ($retweetedMessage[$i]['retweeted_post_id'] === $post['id']){
+		$alreadyRetweeted = $post['id'];
+		break;
+	}
+}
 
 // 返信の場合
 if (isset($_REQUEST['res'])) {
@@ -107,7 +128,7 @@ foreach ($posts as $post):
     <img src="member_picture/<?php echo h($post['picture']); ?>" width="48" height="48" alt="<?php echo h($post['name']); ?>" />
     <p><?php echo makeLink(h($post['message'])); ?><span class="name">（<?php echo h($post['name']); ?>）</span>[<a href="index.php?res=<?php echo h($post['id']); ?>">Re</a>]</p>
     <p class="day"><a href="view.php?id=<?php echo h($post['id']); ?>"><?php echo h($post['created']); ?></a>
-		<?php
+<?php
 if ($post['reply_post_id'] > 0):
 ?>
 <a href="view.php?id=<?php echo
@@ -116,6 +137,19 @@ h($post['reply_post_id']); ?>">
 <?php
 endif;
 ?>
+<!-- リツイートボタン -->
+<?php
+if ($alreadyRetweeted > 0) { 
+?>
+[<a class="retweet" href="retweet.php?id=<?php echo h($post['id']); ?>">RT </a><span class="retweetCount"><?php echo h($post['rt_cnt']); ?></span>]
+<?php 
+} else { 
+?>
+[<a class="retweet" href="retweet.php?id=<?php echo h($post['id']); ?>">RT </a><span class="retweetCount"><?php echo h($post['rt_cnt']); ?></span>]
+<?php 
+} 
+?>
+
 <?php
 if ($_SESSION['id'] == $post['member_id']):
 ?>
