@@ -157,9 +157,9 @@ endif;
 ?>
 <!-- リツイートボタン -->
 <?php
-if ($alreadyRetweeted > 0) { 
+if ($post['rt_cnt'] > 0) { 
 ?>
-[<a class="retweet" href="retweet.php?id=<?php echo h($post['id']); ?>">RT </a><span class="retweetCount"><?php echo h($post['rt_cnt']); ?></span>]
+[<a class="retweet" style="color:#66cdaa;" href="retweet.php?id=<?php echo h($post['id']); ?>">RT </a><span class="retweetCount"><?php echo h($post['rt_cnt']); ?></span>]
 <?php 
 } else { 
 ?>
@@ -172,7 +172,7 @@ if ($alreadyRetweeted > 0) {
 <?php
 if($post['like_cnt'] > 0){
 ?>
-[<a class="like" style="color:red;" href="like.php?id=<?php echo h($post['id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php echo h($post['like_cnt']); ?></span>]
+[<a class="like" style="color:#ff1493;" href="like.php?id=<?php echo h($post['id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php echo h($post['like_cnt']); ?></span>]
 <?php 
 }else {
 ?>
@@ -180,6 +180,7 @@ if($post['like_cnt'] > 0){
 <?php 
 }
 ?>
+
 <?php
 if ($_SESSION['id'] == $post['member_id']):
 ?>
