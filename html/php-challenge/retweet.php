@@ -26,9 +26,10 @@ if (isset($_SESSION['id'])) {
         $do_retweet->execute(array($_REQUEST['id']));
         $do_retweets = $do_retweet->fetch();
 
-        $members = $db->query('SELECT m.name FROM members m, posts p WHERE m.id=p.member_id');
-	    $member = $members->fetch();
-        $doneRt = ' RT from' .' ' .$member['name'];
+        $member = $db->prepare('SELECT m.name FROM members m, posts p WHERE m.id=p.member_id AND p.id=?');
+        $member->execute(array($_REQUEST['id']));
+        $members = $member->fetch();
+        $doneRt = ' RT from' .' ' .$members['name'];
 
         $message = $db->prepare('INSERT INTO posts SET member_id=?, message=?, retweeted_post_id=?, created=NOW()');
         $message->execute(array(
