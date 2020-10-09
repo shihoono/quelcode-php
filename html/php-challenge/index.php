@@ -158,6 +158,7 @@ endif;
 ?>
 <!-- リツイートボタン -->
 <?php
+if ($post['retweeted_post_id'] == 0){
 if ($post['rt_cnt'] > 0) { 
 ?>
 [<a class="retweet" style="color:#66cdaa;" href="retweet.php?id=<?php echo h($post['id']); ?>">RT </a><span class="retweetCount"><?php echo h($post['rt_cnt']); ?></span>]
@@ -167,6 +168,7 @@ if ($post['rt_cnt'] > 0) {
 [<a class="retweet" href="retweet.php?id=<?php echo h($post['id']); ?>">RT </a><span class="retweetCount"><?php echo h($post['rt_cnt']); ?></span>]
 <?php 
 } 
+}
 ?>
 
 <!-- いいねボタン -->
