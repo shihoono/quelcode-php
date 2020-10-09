@@ -17,7 +17,7 @@ if (isset($_SESSION['id']) && $_SESSION['time'] + 3600 > time()) {
 // 投稿を記録する
 if (!empty($_POST)) {
 	if ($_POST['message'] != '') {
-		$message = $db->prepare('INSERT INTO posts SET member_id=?, message=?, reply_post_id=?, created=NOW()');
+		$message = $db->prepare('INSERT INTO posts SET member_id=?, message=?, reply_post_id=?, retweeted_post_id=?, created=NOW()');
 		$message->execute(array(
 			$member['id'],
 			$_POST['message'],
@@ -129,7 +129,8 @@ function makeLink($value) {
         <dt><?php echo h($member['name']); ?>さん、メッセージをどうぞ</dt>
         <dd>
           <textarea name="message" cols="50" rows="5"><?php echo h($message); ?></textarea>
-          <input type="hidden" name="reply_post_id" value="<?php echo h($_REQUEST['res']); ?>" />
+		  <input type="hidden" name="reply_post_id" value="<?php echo h($_REQUEST['res']); ?>" />
+		  <input type="hidden" name="retweeted_post_id" value="<?php echo h($_REQUEST['id']); ?>" />
         </dd>
       </dl>
       <div>
