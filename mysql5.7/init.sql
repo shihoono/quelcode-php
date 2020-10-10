@@ -33,6 +33,7 @@ CREATE TABLE `likes` (
       `id` int(11) NOT NULL AUTO_INCREMENT,
       `liked_post_id` int(11) NOT NULL,
       `like_member_id` int(11) NOT NULL,
+      `retweeted_post` int(11) NOT NULL,
       `created` datetime NOT NULL,
       `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
       PRIMARY KEY (`id`)
