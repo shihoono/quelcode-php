@@ -21,7 +21,6 @@ if (isset($_SESSION['id'])) {
             $_SESSION['id']  
         ));
 
-        // $posts['id'] = $_REQUEST['id'];
         $do_retweet = $db->prepare('SELECT p.message FROM posts p, retweet r WHERE p.id=r.retweeted_post_id AND p.id=?');
         $do_retweet->execute(array($_REQUEST['id']));
         $do_retweets = $do_retweet->fetch();

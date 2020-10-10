@@ -157,6 +157,7 @@ h($post['reply_post_id']); ?>">
 endif;
 ?>
 <!-- リツイートボタン -->
+<!-- リツートされたメッセージにはリツートボタン非表示 -->
 <?php
 if ($post['retweeted_post_id'] == 0){
 if ($post['rt_cnt'] > 0) { 

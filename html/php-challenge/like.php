@@ -29,6 +29,7 @@ if (isset($_SESSION['id'])) {
     ));
     $like = $likes->fetch();
 
+    //retweeted_postに0か１を入れ、通常メッセージかリツートされたメッセージか判別
     if ($post['retweeted_post_id'] > 0){
         $doLike = $db->prepare('INSERT INTO likes SET liked_post_id=?, like_member_id=?, retweeted_post=?, created=NOW()');
         $doLike->execute(array(
