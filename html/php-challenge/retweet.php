@@ -40,16 +40,19 @@ if (isset($_SESSION['id'])) {
 
     if ($retweet['retweet_cnt'] == 1) {
         //リツイートを解除する
-        $do_retweet = $db->prepare('DELETE FROM retweet WHERE retweeted_post_id=? AND retweet_member_id=?');
-        $do_retweet->execute(array(
-            $_REQUEST['id'], 
-            $_SESSION['id']  
-        ));
+        if ($message['member_id'] = $_REQUEST['id']){
+            $do_retweet = $db->prepare('DELETE FROM retweet WHERE retweeted_post_id=? AND retweet_member_id=?');
+            $do_retweet->execute(array(
+                $_REQUEST['id'], 
+                $_SESSION['id']  
+            ));
+        }
 
         $posts['id'] = $_REQUEST['id'];
-        $message = $db->prepare('DELETE FROM posts WHERE retweeted_post_id=?');
+        $message = $db->prepare('DELETE FROM posts WHERE retweeted_post_id=? AND member_id=?');
         $message->execute(array(
-            $posts['id']
+            $posts['id'],
+            $_SESSION['id']
         ));
     }
 }
