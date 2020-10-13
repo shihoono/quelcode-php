@@ -159,7 +159,24 @@ endif;
 <!-- リツイートボタン -->
 <!-- リツートされたメッセージにはリツートボタン非表示 -->
 <?php
-if ($post['retweeted_post_id'] == 0){
+if ($post['retweeted_post_id'] != 0){
+	// $retweets = $db->prepare('SELECT r.* FROM retweet r where retweeted_post_id=?');
+  	// $retweets->execute(array(
+    // 	$post['id']
+  	// ));
+  	// 	foreach ($retweets as $retweet){
+	// 	if ( $retweet['retweet_member_id'] == $_SESSION['id']){
+	$rt_counts = $db->prepare('SELECT COUNT(retweeted_post_id) AS rt_count FROM posts where retweeted_post_id=?');
+	$rt_counts->execute(array(
+		$post['retweeted_post_id']
+	));
+	$rt_count = $rt_counts->fetch();
+?>
+[<a class="retweet" style="color:#66cdaa;" href="retweet.php?id=<?php echo h($post['retweeted_post_id']); ?>">RT </a><span class="retweetCount"><?php echo h($rt_count['rt_count']); ?></span>]
+<?php
+} else { 
+?>
+<?php
 if ($post['rt_cnt'] > 0) { 
 ?>
 [<a class="retweet" style="color:#66cdaa;" href="retweet.php?id=<?php echo h($post['id']); ?>">RT </a><span class="retweetCount"><?php echo h($post['rt_cnt']); ?></span>]
