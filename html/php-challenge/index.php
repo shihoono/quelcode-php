@@ -171,15 +171,28 @@ if ($post['retweeted_post_id'] != 0){
 		$post['retweeted_post_id']
 	));
 	$rt_count = $rt_counts->fetch();
+
+	$rt_members = $db->prepare('SELECT r.retweet_member_id FROM posts p JOIN retweet r ON p.id=r.retweeted_post_id where p.id=? AND r.retweet_member_id=?');
+		$rt_members->execute(array(
+			$post['retweeted_post_id'],
+			$_SESSION['id']
+		));
+		$rt_member = $rt_members->fetch();
 ?>
-[<a class="retweet" style="color:#66cdaa;" href="retweet.php?id=<?php echo h($post['retweeted_post_id']); ?>">RT </a><span class="retweetCount"><?php echo h($rt_count['rt_count']); ?></span>]
+[<a class="retweet" <?php if($rt_member['retweet_member_id'] === $_SESSION['id']){ echo ('style="color:#66cdaa;"');} ?> href="retweet.php?id=<?php echo h($post['retweeted_post_id']); ?>">RT </a><span class="retweetCount"><?php echo h($rt_count['rt_count']); ?></span>]
 <?php
 } else { 
 ?>
 <?php
 if ($post['rt_cnt'] > 0) { 
+	$rt_members = $db->prepare('SELECT r.retweet_member_id FROM posts p JOIN retweet r ON p.id=r.retweeted_post_id where p.id=? AND r.retweet_member_id=?');
+		$rt_members->execute(array(
+			$post['id'],
+			$_SESSION['id']
+		));
+		$rt_member = $rt_members->fetch();
 ?>
-[<a class="retweet" style="color:#66cdaa;" href="retweet.php?id=<?php echo h($post['id']); ?>">RT </a><span class="retweetCount"><?php echo h($post['rt_cnt']); ?></span>]
+[<a class="retweet" <?php if($rt_member['retweet_member_id'] === $_SESSION['id']){ echo ('style="color:#66cdaa;"');} ?> href="retweet.php?id=<?php echo h($post['id']); ?>">RT </a><span class="retweetCount"><?php echo h($post['rt_cnt']); ?></span>]
 <?php 
 } else { 
 ?>
