@@ -191,15 +191,51 @@ if ($post['rt_cnt'] > 0) {
 
 <!-- いいねボタン -->
 <?php
-if($post['like_cnt'] > 0){
-?>
-[<a class="like" style="color:#ff1493;" href="like.php?id=<?php echo h($post['id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php echo h($post['like_cnt']); ?></span>]
-<?php 
-}else {
-?>
-[<a class="like" href="like.php?id=<?php echo h($post['id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php echo h($post['like_cnt']); ?></span>]
-<?php 
-}
+
+	// $likes = $db->prepare('SELECT l.like_member_id FROM posts p JOIN likes l ON p.id=l.liked_post_id where p.id=? AND l.like_member_id=?');
+	// $likes->execute(array(
+	// 	$post['id'],
+	// 	$_SESSION['id']
+	// ));
+	// $like = $likes->fetch();
+	// if($like['like_member_id'] === $_SESSION['id']){
+	// 	$style = 'style="color:#ff1493;"';
+	// }
+	
+	if ($post['retweeted_post_id'] != 0){
+		$li_counts = $db->prepare('SELECT COUNT(liked_post_id) AS li_count FROM likes where liked_post_id=?');
+		$li_counts->execute(array(
+			$post['retweeted_post_id']
+		));
+		$li_count = $li_counts->fetch();
+
+		$like_members = $db->prepare('SELECT like_member_id FROM likes where like_member_id=? AND liked_post_id=?');
+		$like_members->execute(array(
+			$_SESSION['id'],
+			$post['retweeted_post_id']
+		));
+		$like_member = $like_members->fetch();
+
+		?>
+		[<a class="like" <?php if($like_member['like_member_id'] === $_SESSION['id']) { echo ('style="color:#ff1493;"');} ?> href="like.php?id=<?php echo h($post['retweeted_post_id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php if($li_count['li_count'] != 0) { echo h($li_count['li_count']);} ?></span>]
+		<?php
+	} else {
+		if($post['like_cnt'] > 0){
+			$likes = $db->prepare('SELECT l.like_member_id FROM posts p JOIN likes l ON p.id=l.liked_post_id where p.id=? AND l.like_member_id=?');
+			$likes->execute(array(
+				$post['id'],
+				$_SESSION['id']
+			));
+			$like = $likes->fetch();
+			?>
+			[<a class="like" <?php if($like['like_member_id'] === $_SESSION['id']){ echo ('style="color:#ff1493;"');} ?> href="like.php?id=<?php echo h($post['id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php echo h($post['like_cnt']); ?></span>]
+			<?php 
+		}else {
+			?>
+			[<a class="like" href="like.php?id=<?php echo h($post['id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php echo h($post['like_cnt']); ?></span>]
+			<?php 
+		}
+	}
 ?>
 
 <?php
