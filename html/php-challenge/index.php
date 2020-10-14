@@ -224,14 +224,14 @@ if ($post['rt_cnt'] > 0) {
 		<?php
 	} else {
 		if($post['like_cnt'] > 0){
-			$likes = $db->prepare('SELECT l.like_member_id FROM posts p JOIN likes l ON p.id=l.liked_post_id where p.id=? AND l.like_member_id=?');
-			$likes->execute(array(
+			$like_members = $db->prepare('SELECT l.like_member_id FROM posts p JOIN likes l ON p.id=l.liked_post_id where p.id=? AND l.like_member_id=?');
+			$like_members->execute(array(
 				$post['id'],
 				$_SESSION['id']
 			));
-			$like = $likes->fetch();
+			$like_member = $like_members->fetch();
 			?>
-			[<a class="like" <?php if($like['like_member_id'] === $_SESSION['id']){ echo ('style="color:#ff1493;"');} ?> href="like.php?id=<?php echo h($post['id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php echo h($post['like_cnt']); ?></span>]
+			[<a class="like" <?php if($like_member['like_member_id'] === $_SESSION['id']){ echo ('style="color:#ff1493;"');} ?> href="like.php?id=<?php echo h($post['id']); ?>"><i class="fas fa-heart"></i></a><span class="likeCount"><?php echo h($post['like_cnt']); ?></span>]
 			<?php 
 		}else {
 			?>
