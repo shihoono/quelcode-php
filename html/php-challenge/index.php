@@ -160,12 +160,6 @@ endif;
 <!-- リツートされたメッセージにはリツートボタン非表示 -->
 <?php
 if ($post['retweeted_post_id'] != 0){
-	// $retweets = $db->prepare('SELECT r.* FROM retweet r where retweeted_post_id=?');
-  	// $retweets->execute(array(
-    // 	$post['id']
-  	// ));
-  	// 	foreach ($retweets as $retweet){
-	// 	if ( $retweet['retweet_member_id'] == $_SESSION['id']){
 	$rt_counts = $db->prepare('SELECT COUNT(retweeted_post_id) AS rt_count FROM posts where retweeted_post_id=?');
 	$rt_counts->execute(array(
 		$post['retweeted_post_id']
