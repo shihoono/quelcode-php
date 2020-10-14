@@ -191,16 +191,6 @@ if ($post['rt_cnt'] > 0) {
 
 <!-- いいねボタン -->
 <?php
-
-	// $likes = $db->prepare('SELECT l.like_member_id FROM posts p JOIN likes l ON p.id=l.liked_post_id where p.id=? AND l.like_member_id=?');
-	// $likes->execute(array(
-	// 	$post['id'],
-	// 	$_SESSION['id']
-	// ));
-	// $like = $likes->fetch();
-	// if($like['like_member_id'] === $_SESSION['id']){
-	// 	$style = 'style="color:#ff1493;"';
-	// }
 	
 	if ($post['retweeted_post_id'] != 0){
 		$li_counts = $db->prepare('SELECT COUNT(liked_post_id) AS li_count FROM likes where liked_post_id=?');
