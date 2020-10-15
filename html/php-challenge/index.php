@@ -128,14 +128,14 @@ function makeLink($value) {
       <dl>
         <dt><?php echo h($member['name']); ?>さん、メッセージをどうぞ</dt>
         <dd>
-          <textarea name="message" cols="50" rows="5"><?php echo h($message); ?></textarea>
-		  <input type="hidden" name="reply_post_id" value="<?php echo h($_REQUEST['res']); ?>" />
-		  <input type="hidden" name="retweeted_post_id" value="<?php echo h($_REQUEST['id']); ?>" />
+        	<textarea name="message" cols="50" rows="5"><?php echo h($message); ?></textarea>
+			<input type="hidden" name="reply_post_id" value="<?php echo h($_REQUEST['res']); ?>" />
+			<input type="hidden" name="retweeted_post_id" value="<?php echo h($_REQUEST['id']); ?>" />
         </dd>
       </dl>
       <div>
         <p>
-          <input type="submit" value="投稿する" />
+          	<input type="submit" value="投稿する" />
         </p>
       </div>
     </form>
