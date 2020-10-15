@@ -15,18 +15,18 @@ if (isset($_SESSION['id'])) {
   
 
   $posts = $db->prepare('SELECT retweeted_post_id FROM posts WHERE id=?');
-    $posts->execute(array(
-        $_REQUEST['id']
-    ));
-    $post = $posts->fetch();
+  $posts->execute(array(
+      $_REQUEST['id']
+  ));
+  $post = $posts->fetch();
 
   // いいねしようとしているメッセージを、すでにいいねをしていないかチェック
   if ($like['liked_cnt'] == 0) {
     // いいねを登録する
         $doLike = $db->prepare('INSERT INTO likes SET liked_post_id=?, like_member_id=?, created=NOW()');
         $doLike->execute(array(
-            $_REQUEST['id'], 
-            $_SESSION['id']  
+          $_REQUEST['id'], 
+          $_SESSION['id']  
         )); 
   }
 
@@ -36,8 +36,8 @@ if (isset($_SESSION['id'])) {
   if ($like['liked_cnt'] == 1) {
         $doLike = $db->prepare('DELETE FROM likes WHERE liked_post_id=? AND like_member_id=?');
         $doLike->execute(array(
-            $_REQUEST['id'], 
-            $_SESSION['id']  
+          $_REQUEST['id'], 
+          $_SESSION['id']  
         ));
   }
 }
