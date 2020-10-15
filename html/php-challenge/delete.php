@@ -13,7 +13,9 @@ if (isset($_SESSION['id'])) {
 	if ($message['member_id'] == $_SESSION['id']) {
 		// 削除する
 		$del = $db->prepare('DELETE FROM posts WHERE id=?');
-		$del->execute(array($id));
+		$del->execute(array(
+			$id
+		));
 
 		$rtmsg_del = $db->prepare('DELETE FROM posts where retweeted_post_id=?');
 		$rtmsg_del->execute(array(

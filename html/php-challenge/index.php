@@ -119,25 +119,25 @@ function makeLink($value) {
 
 <body>
 <div id="wrap">
-  <div id="head">
-    <h1>ひとこと掲示板</h1>
-  </div>
-  <div id="content">
+  	<div id="head">
+    	<h1>ひとこと掲示板</h1>
+  	</div>
+  	<div id="content">
   	<div style="text-align: right"><a href="logout.php">ログアウト</a></div>
     <form action="" method="post">
-      <dl>
-        <dt><?php echo h($member['name']); ?>さん、メッセージをどうぞ</dt>
-        <dd>
-        	<textarea name="message" cols="50" rows="5"><?php echo h($message); ?></textarea>
-			<input type="hidden" name="reply_post_id" value="<?php echo h($_REQUEST['res']); ?>" />
-			<input type="hidden" name="retweeted_post_id" value="<?php echo h($_REQUEST['id']); ?>" />
-        </dd>
-      </dl>
-      <div>
+      	<dl>
+        	<dt><?php echo h($member['name']); ?>さん、メッセージをどうぞ</dt>
+        	<dd>
+				<textarea name="message" cols="50" rows="5"><?php echo h($message); ?></textarea>
+				<input type="hidden" name="reply_post_id" value="<?php echo h($_REQUEST['res']); ?>" />
+				<input type="hidden" name="retweeted_post_id" value="<?php echo h($_REQUEST['id']); ?>" />
+        	</dd>
+      	</dl>
+    <div>
         <p>
           	<input type="submit" value="投稿する" />
         </p>
-      </div>
+    </div>
     </form>
 
 <?php
