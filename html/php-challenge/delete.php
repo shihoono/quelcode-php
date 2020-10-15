@@ -15,6 +15,15 @@ if (isset($_SESSION['id'])) {
 		$del = $db->prepare('DELETE FROM posts WHERE id=?');
 		$del->execute(array($id));
 
+		$rtmsg_del = $db->prepare('DELETE FROM posts where retweeted_post_id=?');
+		$rtmsg_del->execute(array(
+			$_REQUEST['id']
+		));
+
+		$rt_del = $db->prepare('DELETE FROM retweet where retweeted_post_id=?');
+		$rt_del->execute(array(
+			$_REQUEST['id']
+		));
 	}
 
 }

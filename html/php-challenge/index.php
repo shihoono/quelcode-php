@@ -235,13 +235,15 @@ if ($post['retweeted_post_id'] != 0){
 	}
 ?>
 
+
 <?php
-if ($_SESSION['id'] == $post['member_id']):
+if ($post['retweeted_post_id'] == 0){
+if ($_SESSION['id'] == $post['member_id']){
 ?>
 [<a href="delete.php?id=<?php echo h($post['id']); ?>"
 style="color: #F33;">削除</a>]
 <?php
-endif;
+}}
 ?>
     </p>
     </div>
