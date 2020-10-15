@@ -26,6 +26,11 @@ if (isset($_SESSION['id'])) {
 		$rt_del->execute(array(
 			$_REQUEST['id']
 		));
+
+		$li_del = $db->prepare('DELETE FROM likes where liked_post_id=?');
+		$li_del->execute(array(
+			$_REQUEST['id']
+		));
 	}
 
 }
